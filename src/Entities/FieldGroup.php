@@ -35,8 +35,7 @@ abstract class FieldGroup implements AcfGroupContract
     public string $position = 'normal';
 
     /**
-     * The menu order
-     * The lowest order is displayed before
+     * The group menu order. The lowest the order is, the upper it appears.
      *
      * @var int
      */

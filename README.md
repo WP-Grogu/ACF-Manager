@@ -19,6 +19,70 @@ Groups are represented by classes. Each Field Groups has fields and location(s).
 Fields and locations are using the great `wordplate/extended-acf` package, coming with a explicit documentation, so make sure to checkout [the official repositiory](https://github.com/wordplate/extended-acf).
 
 ### Simple field group definition
+
+To create a group, simply create a file inside the `app/Acf` directory. For example, let's create a `Header` field group.
+
+
+
+```php
+<?php /* app/Acf/Header.php */
+
+namespace App\Acf;
+
+use Grogu\Acf\Entities\FieldGroup;
+use WordPlate\Acf\Location;
+use WordPlate\Acf\Fields\Text;
+use WordPlate\Acf\Fields\Image;
+
+class Header extends FieldGroup
+{
+    /**
+     * The group name to be displayed in back office. Required.
+     *
+     * @var string
+     */
+    public string $title = 'Header';
+
+    /**
+     * The group fields definition.
+     *
+     * @return array
+     */
+    public function fields(): array
+    {
+        return [
+            Text::make('Titre', 'title')
+                ->required(),
+            Image::make('Image')
+                ->previewSize('medium')
+                ->returnFormat('id')
+                ->required(),
+        ];
+    }
+
+    /**
+     * The group location configuration.
+     *
+     * @return array
+     */
+    public function location(): array
+    {
+        return [
+            Location::if('post_type', 'page'),
+            Location::if('post_type', 'post'),
+        ];
+    }
+}
+```
+
+Then, add your class inside the `config/acf.php` config file.
+
+```php
+'groups' => [
+    App\Acf\Header::class,
+],
+```
+
 ### Flexible field group definition
 ### Gutemberg block field group definition
 

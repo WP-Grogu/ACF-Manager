@@ -5,6 +5,15 @@ namespace Grogu\Acf\Transformers;
 use OP\Lib\WpEloquent\Model\Post;
 use Illuminate\Support\Collection;
 
+/**
+ * Transform an ACF relation field output (array of IDs) into a Collection of Eloquent Posts.
+ *
+ * /!\ This requires ObjectPress library.
+ *
+ * @see http://docs.objectpress.hydrat.agency
+ * @package wp-grogu/acf-manager
+ * @author Thomas <thomas@hydrat.agency>
+ */
 class EloquentPosts extends Transformer
 {
     /**

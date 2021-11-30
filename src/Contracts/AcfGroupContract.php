@@ -9,14 +9,14 @@ namespace Grogu\Acf\Contracts;
 interface AcfGroupContract
 {
     /**
-     * The fields configuration
+     * The group fields definitions.
      *
      * @return array
      */
     public function fields(): array;
 
     /**
-     * The location configuration
+     * The group location configuration.
      *
      * @return array
      */
