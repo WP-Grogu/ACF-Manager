@@ -2,8 +2,8 @@
 
 namespace Grogu\Acf;
 
+use Grogu\Acf\Entities\FieldSet;
 use Illuminate\Support\Arr;
-use App\Acf\Helpers\FieldSet;
 use Illuminate\Support\Collection;
 
 /**

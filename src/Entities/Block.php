@@ -1,16 +1,22 @@
 <?php
 
-namespace Grogu\Acf;
+namespace Grogu\Acf\Entities;
 
 use App\Helpers\AcfGroup;
 use App\Helpers\AcfGroups;
+use Grogu\Acf\Contracts\AcfBlockContract;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use WordPlate\Acf\Location;
 use WordPlate\Acf\FieldGroup;
-use Illuminate\Support\Collection;
-use App\Acf\Contracts\AcfBlockContract;
 
+/**
+ * An ACF Block definition to be registred.
+ *
+ * @package wp-grogu/acf-manager
+ * @author Thomas <thomas@hydrat.agency>
+ */
 abstract class Block implements AcfBlockContract
 {
     /**

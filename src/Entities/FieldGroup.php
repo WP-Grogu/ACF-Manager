@@ -1,10 +1,16 @@
 <?php
 
-namespace Grogu\Acf;
+namespace Grogu\Acf\Entities;
 
-use App\Acf\Contracts\AcfGroupContract;
+use Grogu\Acf\Contracts\AcfGroupContract;
 use WordPlate\Acf\FieldGroup as WordPlateFieldGroup;
 
+/**
+ * An ACF Group definition to be registred.
+ *
+ * @package wp-grogu/acf-manager
+ * @author Thomas <thomas@hydrat.agency>
+ */
 abstract class FieldGroup implements AcfGroupContract
 {
     /**
@@ -90,7 +96,7 @@ abstract class FieldGroup implements AcfGroupContract
 
 
     /**
-     * Allow a shortcut method Class::clone() to get fields easily to clone them.
+     * Allow a shortcut method Class::clone() to easily get fields definition to clone them.
      *
      * @return array
      */

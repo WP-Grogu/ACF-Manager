@@ -1,13 +1,20 @@
 <?php
 
-namespace Grogu\Acf;
+namespace Grogu\Acf\Entities;
 
-use Closure;
-use JanPantel\LaravelFluentPlus\FluentPlus;
 use Grogu\Acf\Exceptions\InvalidTransformerException;
 use Grogu\Acf\Contracts\TransformerContract;
 use Illuminate\Support\Collection;
+use JanPantel\LaravelFluentPlus\FluentPlus;
+use Closure;
 
+/**
+ * A parsed fieldset whcih comes from ACF.
+ * Manage Casts with transformers, and allows fluent class access.
+ *
+ * @package wp-grogu/acf-manager
+ * @author Thomas <thomas@hydrat.agency>
+ */
 class FieldSet extends FluentPlus
 {
     /**

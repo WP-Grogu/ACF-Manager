@@ -2,6 +2,10 @@
 
 namespace Grogu\Acf\Contracts;
 
+/**
+ * @package wp-grogu/acf-manager
+ * @author Thomas <thomas@hydrat.agency>
+ */
 interface AcfGroupContract
 {
     /**

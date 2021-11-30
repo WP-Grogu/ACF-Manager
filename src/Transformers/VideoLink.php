@@ -2,8 +2,14 @@
 
 namespace Grogu\Acf\Transformers;
 
-use Grogu\Acf\FieldSet;
+use Grogu\Acf\Entities\FieldSet;
 
+/**
+ * Transforms a ACF link string into a video link represented by an array.
+ *
+ * @package wp-grogu/acf-manager
+ * @author Thomas <thomas@hydrat.agency>
+ */
 class VideoLink extends Transformer
 {
     /**

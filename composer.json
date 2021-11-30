@@ -1,6 +1,6 @@
 {
     "name": "wp-grogu/acf-manager",
-    "description": "An Object-oriented librairy used to create ACF field groups and gutemberg blocks, and retreive the fields data easily. Requires Wordpress, ACF.",
+    "description": "An Object-Oriented library used to create ACF field groups and gutemberg blocks, and retreive the data easily. Requires Wordpress, ACF.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -26,12 +26,12 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.2.5",
-        "laravel/helpers": " ^1.0",
+        "php": "^7.2.5|^8.0",
+        "laravel/helpers": "^1.0",
         "tgeorgel/laravel-fluent-plus": "dev-master",
         "tgeorgel/wordplate-acf": "dev-master"
     },
     "suggest": {
-        "tgeorgel/object-press": "A powerfull OOP library, supporting Laravel packages into Wordpress, such as the Eloquent ORM."
+        "tgeorgel/object-press": "A powerfull Object-Oriented library, adding greatest illuminate packages (Laravel) into Wordpress, such as the Eloquent ORM."
     }
 }

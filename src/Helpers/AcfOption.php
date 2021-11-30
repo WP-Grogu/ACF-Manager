@@ -2,6 +2,12 @@
 
 namespace Grogu\Acf\Helpers;
 
+use Grogu\Acf\Entities\FieldSet;
+
+/**
+ * @package wp-grogu/acf-manager
+ * @author Thomas <thomas@hydrat.agency>
+ */
 class Option
 {
     /**

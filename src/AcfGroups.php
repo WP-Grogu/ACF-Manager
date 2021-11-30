@@ -2,27 +2,37 @@
 
 namespace Grogu\Acf;
 
-use App\Models\Post;
+use Grogu\Acf\Entities\FieldSet;
 use Illuminate\Support\Arr;
-use App\Acf\Helpers\FieldSet;
 use Illuminate\Support\Collection;
-use \OP\Framework\Factories\ModelFactory;
-use OP\Lib\WpEloquent\Model\Contract\WpEloquentPost;
 
+/**
+ * Transforms stored fields to groups, whcih contains FieldSet.
+ *
+ * @package wp-grogu/acf-manager
+ * @author Thomas <thomas@hydrat.agency>
+ */
 class AcfGroups
 {
     protected Collection $fields;
     protected Collection $groups;
 
+    /**
+     * The flexible content fields names.
+     */
     protected array $flexible_names = [
         'components',
     ];
 
+    /**
+     * Prevent external initiation.
+     */
     private function __construct()
     {
+        //
     }
 
-    public function buildGroups()
+    protected function buildGroups()
     {
         $arr       = [];
         $flexibles = $this->flexible_names;
@@ -61,21 +71,32 @@ class AcfGroups
     }
 
 
-    public function recurse(array $values)
+
+    /**
+     * Recursively iterate into fields, looking for arrays.
+     * If the array is associative, returns a new FieldSet, else a Collection.
+     *
+     * @return mixed
+     */
+    protected function recurse(array $values)
     {
         if (Arr::isAssoc($values)) {
             return new FieldSet($values);
         }
 
         return collect($values)->map(function ($new) {
-            if (is_array($new)) {
-                return $this->recurse($new);
-            }
-            return $new;
+            return !is_array($new) ? $new : $this->recurse($new);
         });
     }
 
 
+    /**
+     * Parse flexible content groups.
+     * Replace the acf_fc_layout key by __layout key.
+     * Setup a new FieldSet.
+     *
+     * @return array
+     */
     public function parseFlexibles($flexibles)
     {
         foreach ($flexibles as $index => $flexible) {
@@ -98,13 +119,26 @@ class AcfGroups
         return $key ? $this->groups->get($key, $default) : $this->groups;
     }
 
+
+    /**
+     * Return the field groups as a JSON string.
+     *
+     * @return string
+     */
     public function toJson()
     {
-        return $this->groups->map(function ($group) {
-            return json_decode(json_encode($group));
-        });
+        // return $this->groups->map(function ($group) {
+        //     return json_decode(json_encode($group));
+        // })->toJson();
+        return $this->groups->toJson();
     }
 
+
+    /**
+     * Return the field groups as array.
+     *
+     * @return array
+     */
     public function toArray()
     {
         return $this->groups->toArray();
@@ -118,16 +152,6 @@ class AcfGroups
     /*                                      */
     /****************************************/
 
-
-    /**
-     * @deprecated
-     */
-    public static function fromPost($post = null)
-    {
-        return static::make($post);
-    }
-
-
     /**
      * @deprecated
      */
@@ -135,24 +159,6 @@ class AcfGroups
     {
         return static::makeWith($fields);
     }
-
-    /**
-     * @return AcfGroups|array
-     */
-    public static function make($post = null)
-    {
-        if (!$post || !($post instanceof WpEloquentPost)) {
-            $post = $post ? Post::findOrFail($post) : ModelFactory::currentPost();
-        }
-
-        if (!$post || !method_exists($post, 'getFields')) {
-            return null;
-            throw new \Exception('Could\'n find a data source. Please provide a valid post_id.');
-        }
-
-        return static::makeWith($post->getFields() ?: []);
-    }
-
 
     /**
      * Creates an AcfGroups instance from an array of fields

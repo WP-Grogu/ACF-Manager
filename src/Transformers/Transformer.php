@@ -4,6 +4,10 @@ namespace Grogu\Acf\Transformers;
 
 use Grogu\Acf\Contracts\TransformerContract;
 
+/**
+ * @package wp-grogu/acf-manager
+ * @author Thomas <thomas@hydrat.agency>
+ */
 abstract class Transformer implements TransformerContract
 {
     protected $definition;

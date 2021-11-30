@@ -72,7 +72,7 @@ return [
         'posts'      => Grogu\Acf\Transformers\EloquentPosts::class,
         'mesh_posts' => Grogu\Acf\Transformers\EloquentPosts::class,
 
-        # Video link (parses a class youtube/vimeo link into an array with embed link, video if, platform..)
+        # Video link (parses a classic YouTube/Vimeo link into an array with embed link, video id, platform..)
         'video_link' => Grogu\Acf\Transformers\VideoLink::class,
     ],
 ];
