@@ -39,7 +39,7 @@ class AcfGroups
 
         foreach ($this->fields as $key => $data) {
             # Parse flexibles
-            if (in_array($key, $flexibles)) {
+            if (in_array($key, $flexibles) && $data) {
                 $arr[$key] = $this->parseFlexibles($data);
                 continue;
             }

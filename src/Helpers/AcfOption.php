@@ -8,10 +8,10 @@ use Grogu\Acf\Entities\FieldSet;
  * @package wp-grogu/acf-manager
  * @author Thomas <thomas@hydrat.agency>
  */
-class Option
+class AcfOption
 {
     /**
-     * Get an acf option from database, and parde value into a FieldSet it's an array.
+     * Get an acf option from database, and parse value into a FieldSet if it's an array.
      *
      * @return mixed
      */

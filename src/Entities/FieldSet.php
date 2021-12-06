@@ -2,14 +2,15 @@
 
 namespace Grogu\Acf\Entities;
 
-use Grogu\Acf\Exceptions\InvalidTransformerException;
-use Grogu\Acf\Contracts\TransformerContract;
+use Closure;
+use Grogu\Acf\Core\Config;
 use Illuminate\Support\Collection;
 use JanPantel\LaravelFluentPlus\FluentPlus;
-use Closure;
+use Grogu\Acf\Contracts\TransformerContract;
+use Grogu\Acf\Exceptions\InvalidTransformerException;
 
 /**
- * A parsed fieldset whcih comes from ACF.
+ * A parsed fieldset which comes from ACF.
  * Manage Casts with transformers, and allows fluent class access.
  *
  * @package wp-grogu/acf-manager
@@ -23,39 +24,23 @@ class FieldSet extends FluentPlus
     protected function getCasts()
     {
         $casts = new Collection();
+        
+        $conf  = Config::getInstance();
+        $defs  = $conf->get('acf.casts');
 
-        # TODO : Get casts from config
-        $definitions = [
-            'image'      => Grogu\Acf\Transformers\EloquentPost::class,
-            'image_1'    => Grogu\Acf\Transformers\EloquentPost::class,
-            'image_2'    => Grogu\Acf\Transformers\EloquentPost::class,
-            'image_3'    => Grogu\Acf\Transformers\EloquentPost::class,
-            'img'        => Grogu\Acf\Transformers\EloquentPost::class,
-            'picto'      => Grogu\Acf\Transformers\EloquentPost::class,
-            'post'       => Grogu\Acf\Transformers\EloquentPost::class,
-            'page'       => Grogu\Acf\Transformers\EloquentPost::class,
-            'product'    => Grogu\Acf\Transformers\EloquentPost::class,
-
-            'images'     => Grogu\Acf\Transformers\EloquentPosts::class,
-            'posts'      => Grogu\Acf\Transformers\EloquentPosts::class,
-            'mesh_posts' => Grogu\Acf\Transformers\EloquentPosts::class,
-
-            'video_link' => Grogu\Acf\Transformers\VideoLink::class,
-        ];
-
-        foreach ($definitions as $field_name => $transformer_class) {
-            if (!class_exists($transformer_class)) {
+        foreach ($defs as $field_name => $class) {
+            if (!class_exists($class)) {
                 throw new InvalidTransformerException(
-                    sprintf('Grogu\Acf : The transformer class `%s` does not exists.', $transformer_class)
+                    sprintf('Grogu\Acf : The transformer class `%s` does not exists.', $class)
                 );
             }
-            if (!in_array(TransformerContract::class, class_implements($transformer_class))) {
+            if (!in_array(TransformerContract::class, class_implements($class))) {
                 throw new InvalidTransformerException(
-                    sprintf('Grogu\Acf : The transformer class `%s` must implements the `%s` interface.', $transformer_class, TransformerContract::class)
+                    sprintf('Grogu\Acf : The transformer class `%s` must implements the `%s` interface.', $class, TransformerContract::class)
                 );
             }
 
-            $casts->put($field_name, $this->closure('transform', $transformer_class));
+            $casts->put($field_name, $this->closure('transform', new $class));
         }
 
         return $casts->toArray();
@@ -63,7 +48,7 @@ class FieldSet extends FluentPlus
 
 
     /**
-     * Creates a closure from a methods and a class
+     * Creates a closure from a class instance and a internal method.
      *
      * @return Closure
      */
