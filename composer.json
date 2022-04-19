@@ -12,10 +12,6 @@
     "repositories": [
         {
           "type": "vcs",
-          "url": "https://gitlab.com/tgeorgel/laravel-fluent-plus.git"
-        },
-        {
-          "type": "vcs",
           "url": "https://gitlab.com/tgeorgel/extended-acf.git"
         }
     ],
@@ -28,10 +24,10 @@
     "require": {
         "php": "^7.2.5|^8.0",
         "laravel/helpers": "^1.0",
-        "tgeorgel/laravel-fluent-plus": "dev-master",
-        "tgeorgel/wordplate-acf": "dev-master"
+        "tgeorgel/wordplate-acf": "dev-master",
+        "wp-grogu/laravel-fluent-plus": "dev-master"
     },
     "suggest": {
-        "tgeorgel/object-press": "A powerfull Object-Oriented library, adding greatest illuminate packages (Laravel) into Wordpress, such as the Eloquent ORM."
+        "tgeorgel/object-press": "A powerfull Object-Oriented library, adding greatest illuminate packages (Laravel) into Wordpress, such as the Eloquent ORM, validation, events, and many more."
     }
 }

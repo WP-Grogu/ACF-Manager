@@ -5,7 +5,7 @@ namespace Grogu\Acf\Entities;
 use Closure;
 use Grogu\Acf\Core\Config;
 use Illuminate\Support\Collection;
-use JanPantel\LaravelFluentPlus\FluentPlus;
+use Grogu\FluentPlus\FluentPlus;
 use Grogu\Acf\Contracts\TransformerContract;
 use Grogu\Acf\Exceptions\InvalidTransformerException;
 
