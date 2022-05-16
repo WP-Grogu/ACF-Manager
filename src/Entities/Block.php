@@ -181,14 +181,12 @@ abstract class Block implements AcfBlockContract
      */
     public $styles = [];
 
-
     /**
      * The block preview example data.
      *
      * @var array
      */
     public $example = [];
-
 
     /**
      * The field groups.
@@ -197,14 +195,12 @@ abstract class Block implements AcfBlockContract
      */
     protected $fields;
 
-
     /**
      * The default field settings.
      *
      * @var \Illuminate\Support\Collection|array
      */
     protected $defaults = [];
-
 
     /**
      * Assets enqueued when rendering the block.
@@ -262,7 +258,6 @@ abstract class Block implements AcfBlockContract
         \register_field_group($this->fields);
     }
 
-
     /**
      * Compose the defined field group and register it
      * with Advanced Custom Fields.
@@ -297,7 +292,6 @@ abstract class Block implements AcfBlockContract
                 'value' => $this->namespace,
             ]);
         }
-
 
         acf_register_block([
             'name'          => $this->slug,
@@ -369,7 +363,6 @@ abstract class Block implements AcfBlockContract
         return $this->view($this->view, ['block' => $this]);
     }
 
-
     /**
      * Build up the associated view
      *
@@ -393,7 +386,6 @@ abstract class Block implements AcfBlockContract
         return view($view, $with, $this->with())->render();
     }
 
-
     /**
      * The block associated fields.
      *
@@ -403,7 +395,6 @@ abstract class Block implements AcfBlockContract
     {
         return [];
     }
-
 
     /**
      * The block location(s).
@@ -416,7 +407,6 @@ abstract class Block implements AcfBlockContract
             Location::if('block', $this->namespace),
         ];
     }
-
 
     /**
      * Get the parsed fields for displaying

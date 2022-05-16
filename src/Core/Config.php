@@ -48,7 +48,6 @@ final class Config
         }
     }
 
-
     /**
      * Get a single config item from it's full key path
      * Recursively look into arrays.
@@ -79,7 +78,6 @@ final class Config
         return $this->getItemRecursive($items, $keys);
     }
 
-
     /**
      * Get a single config item from it's full key path
      * Recursively look into arrays.
@@ -103,7 +101,6 @@ final class Config
                 ->first();
     }
 
-
     /**
      * Get a single config item from it's full key path
      * Recursively look into arrays.
@@ -124,8 +121,6 @@ final class Config
         return collect($this->get($key))
                 ->first();
     }
-
-
 
     /**
      * Recursively look into arrays to find an item.
@@ -157,7 +152,6 @@ final class Config
 
         return null;
     }
-
 
     /**
      * Get a config Domain array from it's path
@@ -205,7 +199,6 @@ final class Config
         return $result;
     }
 
-
     /**
      * Iterate into paths to find the first presence of $relative_path.
      * If the relative path can't be found on any paths, returns false
@@ -230,7 +223,6 @@ final class Config
         return $paths;
     }
 
-
     /**
      * From domain, get relative file path
      *
@@ -246,7 +238,6 @@ final class Config
             '.php'
         ]);
     }
-
 
     /**
      * Add a path to search config files from.
@@ -270,7 +261,6 @@ final class Config
 
         array_unshift(static::$paths, ...$paths);
     }
-
 
     /**
      * Returns the paths to search config files from.

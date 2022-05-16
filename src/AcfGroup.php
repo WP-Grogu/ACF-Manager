@@ -21,7 +21,6 @@ class AcfGroup
      */
     protected $group;
 
-
     /**
      * The class constructor
      */
@@ -29,7 +28,6 @@ class AcfGroup
     {
         $this->group = $this->recurse($fields);
     }
-
 
     /**
      * Recursively iterate into sub-arrays to parse them into Collection or FieldSet.
@@ -50,7 +48,6 @@ class AcfGroup
         });
     }
 
-
     /**
      * Get the group
      *
@@ -60,7 +57,6 @@ class AcfGroup
     {
         return $this->group;
     }
-
 
     /**
      * Shorthand method for function chaining.

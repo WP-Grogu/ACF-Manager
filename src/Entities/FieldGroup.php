@@ -2,6 +2,7 @@
 
 namespace Grogu\Acf\Entities;
 
+use WordPlate\Acf\Fields\Layout;
 use Grogu\Acf\Contracts\AcfGroupContract;
 use WordPlate\Acf\FieldGroup as WordPlateFieldGroup;
 
@@ -14,28 +15,35 @@ use WordPlate\Acf\FieldGroup as WordPlateFieldGroup;
 abstract class FieldGroup implements AcfGroupContract
 {
     /**
-     * The group name to be displayed in back office
+     * The group name to be displayed in back office.
      *
      * @var string
      */
     public string $title;
+    
+    /**
+     * The group slug to be used when transformed into a flexible layout.
+     *
+     * @var string
+     */
+    public string $slug = '';
 
     /**
-     * The group style
+     * The group style.
      *
      * @var string default|seamless
      */
     public string $style = 'default';
 
     /**
-     * The group position
+     * The group position.
      *
      * @var string normal
      */
     public string $position = 'normal';
 
     /**
-     * The group menu order. The lowest the order is, the upper it appears.
+     * The group menu order. Lowest value appears first.
      *
      * @var int
      */
@@ -50,6 +58,25 @@ abstract class FieldGroup implements AcfGroupContract
         'the_content',
     ];
 
+    /**
+     * Allow overriding groups properties to easily extend groups.
+     *
+     * @param  string  $title           Optional.
+     * @param  string  $slug            Optional.
+     * @param  array   $hide_on_screen  Optional.
+     */
+    public function __construct(?string $title = null, ?string $slug = null, ?array $hide_on_screen = null)
+    {
+        if ($title) {
+            $this->title = $title;
+        }
+        if ($slug) {
+            $this->slug = $slug;
+        }
+        if ($hide_on_screen) {
+            $this->hide_on_screen = $hide_on_screen;
+        }
+    }
 
     /**
      * Use the group parameters to boot and register the group into ACF.
@@ -63,13 +90,12 @@ abstract class FieldGroup implements AcfGroupContract
         return $this;
     }
 
-
     /**
      * Use the group parameters to boot and register the group into ACF.
      *
-     * @return WordPlateFieldGroup
+     * @return \WordPlate\Acf\FieldGroup
      */
-    public function build(): WordPlateFieldGroup
+    protected function build(): WordPlateFieldGroup
     {
         $config = [
             'title'          => $this->title,
@@ -84,7 +110,6 @@ abstract class FieldGroup implements AcfGroupContract
         return new WordPlateFieldGroup($config);
     }
 
-
     /**
      * @inherit
      */
@@ -93,6 +118,35 @@ abstract class FieldGroup implements AcfGroupContract
         return [];
     }
 
+    /**
+     * Transform the FieldGroup into a Layout instance, to use in flexible content.
+     * You may override the slug using this class slug property.
+     *
+     * @param string $layout block, row or table
+     * @return \WordPlate\Acf\Fields\Layout
+     */
+    public function toLayout(string $layout = 'block')
+    {
+        return Layout::make($this->title, $this->slug ?: null)
+                    ->layout($layout)
+                    ->fields(
+                        $this->fields()
+                    );
+    }
+
+    /**
+     * Static method to create a new instance, allowing method chaining.
+     *
+     * @param  string  $title           Optional.
+     * @param  string  $slug            Optional.
+     * @param  array   $hide_on_screen  Optional.
+     *
+     * @return self
+     */
+    public static function make(?string $title = null, ?string $slug = null, ?array $hide_on_screen = null)
+    {
+        return new static($title, $slug, $hide_on_screen);
+    }
 
     /**
      * Allow a shortcut method Class::clone() to easily get fields definition to clone them.
@@ -101,6 +155,6 @@ abstract class FieldGroup implements AcfGroupContract
      */
     public static function clone(): array
     {
-        return (new static())->fields();
+        return static::make()->fields();
     }
 }

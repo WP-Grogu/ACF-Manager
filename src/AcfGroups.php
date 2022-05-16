@@ -45,7 +45,7 @@ class AcfGroups
             }
 
             # Parse static blocks
-            $names      = explode('-', $key);
+            $names      = explode('-', (string) $key);
             $field_name = array_pop($names);
             $group_name = implode('-', $names);
 
@@ -70,8 +70,6 @@ class AcfGroups
         });
     }
 
-
-
     /**
      * Recursively iterate into fields, looking for arrays.
      * If the array is associative, returns a new FieldSet, else a Collection.
@@ -88,7 +86,6 @@ class AcfGroups
             return !is_array($new) ? $new : $this->recurse($new);
         });
     }
-
 
     /**
      * Parse flexible content groups.
@@ -108,7 +105,6 @@ class AcfGroups
         return $flexibles;
     }
 
-
     /**
      * Get a group by name, or all groups
      *
@@ -118,7 +114,6 @@ class AcfGroups
     {
         return $key ? $this->groups->get($key, $default) : $this->groups;
     }
-
 
     /**
      * Return the field groups as a JSON string.
@@ -133,7 +128,6 @@ class AcfGroups
         return $this->groups->toJson();
     }
 
-
     /**
      * Return the field groups as array.
      *
@@ -143,7 +137,6 @@ class AcfGroups
     {
         return $this->groups->toArray();
     }
-
 
 
     /****************************************/
