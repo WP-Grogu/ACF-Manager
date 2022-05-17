@@ -81,23 +81,25 @@ abstract class FieldGroup implements AcfGroupContract
     /**
      * Use the group parameters to boot and register the group into ACF.
      *
-     * @return self
+     * @return static
      */
     public function boot()
     {
-        \register_field_group($this->build()->toArray());
+        \register_extended_field_group(
+            $this->build()
+        );
 
         return $this;
     }
 
     /**
-     * Use the group parameters to boot and register the group into ACF.
+     * Build the field group parameters array in order to register it. 
      *
-     * @return \WordPlate\Acf\FieldGroup
+     * @return array
      */
-    protected function build(): WordPlateFieldGroup
+    protected function build(): array
     {
-        $config = [
+        return [
             'title'          => $this->title,
             'style'          => $this->style,
             'position'       => $this->position,
@@ -106,8 +108,6 @@ abstract class FieldGroup implements AcfGroupContract
             'fields'         => $this->fields(),
             'location'       => $this->location(),
         ];
-
-        return new WordPlateFieldGroup($config);
     }
 
     /**
