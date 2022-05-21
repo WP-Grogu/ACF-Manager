@@ -56,12 +56,13 @@ final class Config
      * config/auth.php => ['encryption' => ['name' => 'abc]]  => returns 'abc'
      *
      * @param string $key
+     * @param mixed  $default When value is not found.
      *
      * @return string|null Returns null if the key is not found
      * @since 1.0.3
      * @version 1.0.5
      */
-    public function get(string $key)
+    public function get(string $key, $default = null)
     {
         if (strpos($key, '.') === false) {
             return '';
@@ -72,7 +73,7 @@ final class Config
         $items  = $this->getDomain($domain);
 
         if (!$items) {
-            return null;
+            return $default;
         }
 
         return $this->getItemRecursive($items, $keys);

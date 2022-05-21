@@ -2,8 +2,9 @@
 
 namespace Grogu\Acf;
 
-use Grogu\Acf\Entities\FieldSet;
+use Grogu\Acf\Core\Config;
 use Illuminate\Support\Arr;
+use Grogu\Acf\Entities\FieldSet;
 use Illuminate\Support\Collection;
 
 /**
@@ -20,16 +21,19 @@ class AcfGroups
     /**
      * The flexible content fields names.
      */
-    protected array $flexible_names = [
-        'components',
-    ];
+    protected array $flexible_names;
 
     /**
      * Prevent external initiation.
      */
     private function __construct()
     {
-        //
+        $conf  = Config::getInstance();
+        $defs  = $conf->get('acf.flexibles', [
+            'components',
+        ]);
+
+        $this->flexible_names = $defs;
     }
 
     protected function buildGroups()

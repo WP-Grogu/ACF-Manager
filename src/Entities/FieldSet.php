@@ -26,7 +26,7 @@ class FieldSet extends FluentPlus
         $casts = new Collection();
         
         $conf  = Config::getInstance();
-        $defs  = $conf->get('acf.casts');
+        $defs  = $conf->get('acf.casts', []);
 
         foreach ($defs as $field_name => $class) {
             if (!class_exists($class)) {
