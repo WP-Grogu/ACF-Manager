@@ -101,6 +101,7 @@ class AcfGroups
     public function parseFlexibles($flexibles)
     {
         foreach ($flexibles as $index => $flexible) {
+            $flexible['__index']  = $index;
             $flexible['__layout'] = $flexible['acf_fc_layout'];
             unset($flexible['acf_fc_layout']);
             $flexibles[$index] = new FieldSet($flexible);
