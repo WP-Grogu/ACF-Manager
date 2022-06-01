@@ -18,26 +18,22 @@
 
 ## Introduction
 
-This package brings an object-oriented approach to Wordpress Advanced Custom Fields plugin. It helps you create field groups, gutemberg blocks, options pages and flexible content very easily directly in PHP Classes, and keep a structured app folder. Using this package will make you stop using the ACF interface, and allow you to git your ACF fields and make it a breeze to push your changes to multiple environments.
+This package brings an object-oriented approach to Wordpress Advanced Custom Fields (ACF) plugin. It will help you creating field groups, gutemberg blocks, options pages and flexible content directly in individual PHP Classes, keeping a clean and structured app folder. Using this package will make forget about the ACF back-office interface, allow you to version control your ACF groups and make it a *breeze* to push your changes to multiple environments.
 
-In addition to that, you also receive back a `FieldSet` class when retreiving your fields from the database, which enable field parsing and allow you to cast fields into Models, classes, or any other transformed data based on the field name (eg. a field named "image" becomes an `Attachment` model with all the corresponding methods).
+In addition to thoses features, you will also receive back a `FieldSet` class when retreiving your fields from the database, which enables fields recursive parsing and allow you to cast them into Models, classes, or any other transformed data based on the field name (eg. a field named "image" may become an `Attachment` model, with all the corresponding attributes and methods).
 
-Behing the scene, acf-manager uses a fork of `wordplate/extended-acf` package, coming with an explicit documentation, so make sure to checkout [the official repositiory](https://github.com/wordplate/extended-acf) to see which fields you may create.
+Behing the scene, acf-manager uses an homemake fork of `wordplate/extended-acf` package, coming with an explicit documentation, so make sure to checkout [the official repositiory](https://github.com/wordplate/extended-acf) to see which fields you may create.
 
-To make use of Eloquent Models in your app if not included in your framework, we highly recommand having a look at the [ObjectPress](https://gitlab.com/tgeorgel/object-press) library which brings some of the best Laravel features in any Wordpress installation. 
+To make use of Eloquent Models (and corresponding builts-in transformers) in your app, if not already included in your framework, we highly recommand having a look at the [ObjectPress](https://gitlab.com/tgeorgel/object-press) library which brings some of the best Laravel features in any Wordpress installation. 
 
-This package is compatible with [Bedrock/Sage 10](https://roots.io/sage/) stack, or even with a native Wordpress theme with autoload logic.
+This package comes as a standalone but is fully compatible with [Bedrock/Sage 10](https://roots.io/sage/) stack, with a native Wordpress theme (with an autoload logic setted up), and most probably with other frameworks out here.
 
 At it's most basic usage, the plugin may be used this way to create a field group :  
 
 ```php
 <?php
 
-namespace App\Acf\Groups;
-
-use Grogu\Acf\Entities\FieldGroup;
-
-class Header extends FieldGroup
+class Header extends \Grogu\Acf\Entities\FieldGroup
 {
     public function fields(): array
     {
@@ -65,7 +61,7 @@ add_action(
 );
 ```
 
-However, this package make use of config files to manage your blocks registragion without the need to use hooks :  
+However, this package make use of config files to manage your blocks registration without the need to use hooks :  
 
 ```php
 // config/acf.php
@@ -86,10 +82,11 @@ return [
     */
 
     'groups' => [
-        App\Acf\Groups\Header::class,
+        App\Acf\Header::class,
     ],
 
     [...]
+];
 ```
 
 It's also very easy to build a beautiful Free Section using Flexible content powers :  
@@ -128,10 +125,24 @@ Finally, when receiving back your fields, you may parse them into Field sets to 
 ```php
 // views/header.blade.php
 
+<?php
+$fields = new Grogu\Acf\Entities\FieldSet(
+    get_field('header', $post_id)
+);
+?>
+
 <div class="bloc-header-home">
-    <div class="main-text">{{ $fields->title }}</div>
+    <div class="main-text">{{ $fields->title ?: '' }}</div>
     <img src="{{ $fields['image']['url'] }}" alt="{{ $fields->get('image')->alt }}">
 </div>
+```
+
+The field set class is completely fluent and all of those methods are valid to get the values :
+
+```php
+$fields->sub->field
+$fields['sub']['field']
+$fields->get('sub.field')
 ```
 
 Ready to get started ? Set.. go !
