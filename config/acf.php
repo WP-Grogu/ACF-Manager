@@ -1,7 +1,5 @@
 <?php
 
-use WordPlate\Acf\Fields\Concerns\IsTranslatable;
-
 return [
 
     /*
@@ -17,13 +15,12 @@ return [
 
     'groups' => [
         # Layouts
-        // App\Acf\Layouts\Templates\FreeSection::class,
-        // App\Acf\Layouts\Blocks\Header::class,
+        // App\Acf\Layouts\SinglePost::class,
+        // App\Acf\Layouts\Templates\FlexibleSection::class,
 
         # Options
         // App\Acf\Options\General::class,
     ],
-
 
 
     /*
@@ -38,11 +35,25 @@ return [
     */
 
     'defaults' => [
-        // IsTranslatable::WPML_CONFIG_KEY => IsTranslatable::COPY_ONCE,
+        // 'wpml_cf_preferences' => 3, // copy once
     ],
-    
-    
-    
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | The ACF Flexible field names
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set your flexible field names so they
+    | get recursively parsed into FieldSet classes.
+    |
+    */
+
+    'flexibles' => [
+        'components',
+    ],
+
+
     /*
     |--------------------------------------------------------------------------
     | The ACF fields casts (FieldSet)
@@ -50,29 +61,26 @@ return [
     |
     | Here you can set specify which fields should be casted to something.
     | For exemple, you may use the `Grogu\Acf\Transformers\EloquentPost`
-    | transformer to cast a Relationnal field into a single post model
-    | Please note that your Relationnal field MUST return ids
+    | transformer to cast a relationnal field into a single post model
+    | Please note that in that case, your relationnal field MUST return ids.
     |
     */
 
     'casts' => [
         # Single post model (Eloquent ORM)
-        'image'      => Grogu\Acf\Transformers\EloquentPost::class,
-        'image_1'    => Grogu\Acf\Transformers\EloquentPost::class,
-        'image_2'    => Grogu\Acf\Transformers\EloquentPost::class,
-        'image_3'    => Grogu\Acf\Transformers\EloquentPost::class,
-        'img'        => Grogu\Acf\Transformers\EloquentPost::class,
-        'picto'      => Grogu\Acf\Transformers\EloquentPost::class,
         'post'       => Grogu\Acf\Transformers\EloquentPost::class,
         'page'       => Grogu\Acf\Transformers\EloquentPost::class,
         'product'    => Grogu\Acf\Transformers\EloquentPost::class,
+        'image'      => Grogu\Acf\Transformers\EloquentPost::class,
+        'picto'      => Grogu\Acf\Transformers\EloquentPost::class,
 
         # Multiple post models (Eloquent ORM, keeps the relationnal field order)
-        'images'     => Grogu\Acf\Transformers\EloquentPosts::class,
         'posts'      => Grogu\Acf\Transformers\EloquentPosts::class,
-        'mesh_posts' => Grogu\Acf\Transformers\EloquentPosts::class,
 
-        # Video link (parses a classic YouTube/Vimeo link into an array with embed link, video id, platform..)
+        # Video link (parses a classic YouTube/Vimeo link into an array with embed link, video id, platform name)
         'video_link' => Grogu\Acf\Transformers\VideoLink::class,
+
+        # Theme casts..
+        // 'field_name' => App\Acf\Transformers\MyField::class,
     ],
 ];
