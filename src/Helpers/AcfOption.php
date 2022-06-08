@@ -2,6 +2,7 @@
 
 namespace Grogu\Acf\Helpers;
 
+use Illuminate\Support\Arr;
 use Grogu\Acf\Entities\FieldSet;
 
 /**
@@ -19,6 +20,12 @@ class AcfOption
     {
         $data = get_field($key, 'options', $format_value);
 
-        return is_array($data) ? new FieldSet($data) : $data;
+        if (!is_array($data)) {
+            return $data;
+        }
+        
+        return Arr::isAssoc($data)
+                ? new FieldSet($data)
+                : collect($data)->map(fn ($i) => new FieldSet($i));
     }
 }
