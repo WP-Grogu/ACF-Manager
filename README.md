@@ -5,6 +5,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/wp-grogu/acf-manager.svg?style=flat-square)](https://packagist.org/packages/wp-grogu/acf-manager)
 
 - [Introduction](#introduction)
+- [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
     - [Create a field group](#usage-create-field-group)
@@ -18,21 +19,23 @@
 
 ## Introduction
 
-This package brings an object-oriented approach to Wordpress Advanced Custom Fields (ACF) plugin. It will help you creating field groups, gutemberg blocks, options pages and flexible content directly in individual PHP Classes, keeping a clean and structured app folder. Using this package will make forget about the ACF back-office interface, allow you to version control your ACF groups and make it a *breeze* to push your changes to multiple environments.
+This package brings an object-oriented approach to Wordpress Advanced Custom Fields (ACF) plugin. ACF manager will help you to create field groups, gutemberg blocks, options pages and flexible content directly in individual PHP classes, so you keep a clean and structured app folder. Using this package will make forget about the ACF back-office interface, allowing you to version control your ACF groups and make it a *breeze* to push your changes to multiple environments.
 
-In addition to thoses features, you will also receive back a `FieldSet` class when retreiving your fields from the database, which enables fields recursive parsing and allow you to cast them into Models, classes, or any other transformed data based on the field name (eg. a field named "image" may become an `Attachment` model, with all the corresponding attributes and methods).
+In addition to thoses (awesome) features, you will also receive back `FieldSet` objects instead of arrays when retreiving your fields from the database, which enables fields casting into Models, classes, or any other transformed data based on the field name (eg. a field named "image" may become an `App\Models\Attachment` object, with all the corresponding attributes and methods).
 
-Behing the scene, acf-manager uses an homemake fork of `wordplate/extended-acf` package, coming with an explicit documentation, so make sure to checkout [the official repositiory](https://github.com/wordplate/extended-acf) to see which fields you may create.
+Behing the scene, acf-manager uses a custom fork of `wordplate/extended-acf` package, coming with an explicit documentation, so make sure to checkout [the official repositiory](https://github.com/wordplate/extended-acf) to discover how to define fields.
 
 To make use of Eloquent Models (and corresponding builts-in transformers) in your app, if not already included in your framework, we highly recommand having a look at the [ObjectPress](https://gitlab.com/tgeorgel/object-press) library which brings some of the best Laravel features in any Wordpress installation. 
 
-This package comes as a standalone but is fully compatible with [Bedrock/Sage 10](https://roots.io/sage/) stack, with a native Wordpress theme (with an autoload logic setted up), and most probably with other frameworks out here.
+This package comes as a standalone but is fully compatible with [Bedrock/Sage 10](https://roots.io/sage/) stack, with a native Wordpress theme (with an autoload logic setted up), and probably with many other frameworks out here.
+
+
+## Basic usage  
 
 At it's most basic usage, the plugin may be used this way to create a field group :  
 
 ```php
-<?php
-
+# Define field group
 class Header extends \Grogu\Acf\Entities\FieldGroup
 {
     public function fields(): array
@@ -55,19 +58,13 @@ class Header extends \Grogu\Acf\Entities\FieldGroup
     }
 }
 
-add_action(
-    'acf/init', 
-    fn () => Header::make()->boot()
-);
+# Boot field group
+add_action('acf/init', fn () => Header::make()->boot());
 ```
 
-However, this package make use of config files to manage your blocks registration without the need to use hooks :  
+This package has a config file to manage your blocks registration without the need to use wordpress hooks :  
 
 ```php
-// config/acf.php
-
-<?php
-
 return [
 
     /*
@@ -89,11 +86,9 @@ return [
 ];
 ```
 
-It's also very easy to build a beautiful Free Section using Flexible content powers :  
+It's also a breeze to create Flexible content sections :  
 
 ```php
-<?php
-
 use Grogu\Acf\Entities\FieldGroup;
 
 class FreeSection extends FieldGroup
@@ -123,29 +118,47 @@ class FreeSection extends FieldGroup
 Finally, when receiving back your fields, you may parse them into Field sets to benefit from casting and fluent interface allowing multiple accessors on the class : 
 
 ```php
-// views/header.blade.php
-
 <?php
-$fields = new Grogu\Acf\Entities\FieldSet(
-    get_field('header', $post_id)
-);
+
+use Grogu\Acf\Entities\FieldSet;
+
+$fields = FieldSet::make(get_field('header', $post_id));
+
 ?>
 
+// views/header.blade.php
 <div class="bloc-header-home">
-    <div class="main-text">{{ $fields->title ?: '' }}</div>
-    <img src="{{ $fields['image']['url'] }}" alt="{{ $fields->get('image')->alt }}">
+    <div class="main-text">{{ $fields->title }}</div>
+    <img src="{{ $fields->image->url }}" alt="{{ $fields->image->alt }}">
 </div>
 ```
 
-The field set class is completely fluent and all of those methods are valid to get the values :
+The `FieldSet` class is completely fluent and all of those methods are valid to get values :
 
 ```php
+$fields = FieldSet::make([
+    'sub' => [
+        'field' => 'foo',
+    ],
+]);
+
 $fields->sub->field
+$fields->sub?->field
 $fields['sub']['field']
 $fields->get('sub.field')
 ```
 
-Ready to get started ? Set.. go !
+Ready to get started ?
+
+<a name="requirements"></a>
+
+## Requirements
+
+ACF manager has some requirements : 
+  - PHP `>= 8.0`
+  - Wordpress
+  - ACF plugin enabled
+
 
 <a name="installation"></a>
 
@@ -161,13 +174,8 @@ composer require wp-grogu/acf-manager
 
 ```
 - theme
-    - resources
     - config
     - app
-        - Helpers
-        - Providers
-        - Api
-        - Models
         - Acf
             - Groups
             - Blocks
@@ -196,15 +204,12 @@ composer require wp-grogu/acf-manager
 new Grogu\Acf\Core\Bootloader;
 ```
 
-3. Create the `config/acf.php` file which will hold your configuration using the wp CLI :
+5. Create the `config/acf.php` file which will hold your configuration using WP-CLI :
 ```bash
-wp grogu-acf make:config
+wp grogu-acf install:config
 ```
 
 Or copy/paste it directly from the [source file](https://github.com/WP-Grogu/ACF-Manager/blob/main/config/acf.php).
-
-
-> 🚀 You should be using a PSR-4 autoload logic to make the best out of this module.
 
 
 <a name="usage"></a>
@@ -213,21 +218,16 @@ Or copy/paste it directly from the [source file](https://github.com/WP-Grogu/ACF
 
 ## Usage
 
-Every field group or gutemberg block has it's own file and individual class. Each of them has fields, obviously, and may have one or more location(s). Those are defined using the great [wordplate/extended-acf](https://github.com/wordplate/extended-acf) package, which provides a fluent API wrapping up ACF fields definitions.
+Every field group or gutemberg block has it's own individual class/file. Each of them has, obviously, some fields, and some may also have one or more locations. All of them are defined using the great [wordplate/extended-acf](https://github.com/wordplate/extended-acf) package, which provides a fluent API around ACF.
 
 
 ### Create a field group
 
-To create a group, run the folowing WP Cli command : 
+To create a group, run the following WP-CLI command : 
 
 ```bash
 wp grogu-acf make:group GroupName
-```
-
-You may also specify a sub directory : 
-
-```bash
-wp grogu-acf make:group GroupName --templates
+wp grogu-acf make:group GroupName --in:Templates # specify subdir
 ```
 
 A new file is created :
@@ -290,20 +290,6 @@ class GroupName extends FieldGroup
     [...]
 
     /**
-     * The group name to be displayed in back office.
-     *
-     * @var string
-     */
-    public string $title;
-    
-    /**
-     * The group slug to be used when transformed into a flexible layout.
-     *
-     * @var string
-     */
-    public string $slug = '';
-
-    /**
      * The group style.
      *
      * @var string default|seamless
@@ -338,23 +324,21 @@ class GroupName extends FieldGroup
 Once your fields and locations are defined, you may register your new group in the `config/acf.php` config file, using the `groups` key :
 
 ```php
+[...]
+
 'groups' => [
     App\Acf\GroupName::class,
 ],
+
 ```
 
 You may also combine fields from another group using the PHP splat operator : 
 
 ```php
-/**
- * The group fields definition.
- *
- * @return array
- */
 public function fields(): array
 {
     return [
-        ...App\Acf\Groups\Header::clone(),
+        ...Groups\Header::clone(),
 
         Text::make('Headline', 'headline'),
     ];
@@ -371,74 +355,17 @@ public function fields(): array
 
 ### Working with flexible content
 
-Because your fields are defined in individual classes, it becomes really easy to copy your fields from one group to another, or transform them into layouts. For example, let's assume you are defining each of your flexible layouts as field groups, inside a `app/Acf/Groups` directory :
+Because your fields are defined in individual classes, it becomes really easy to copy your fields from one group to another, or transform them into layouts. For this example, we will assume you are defining each of your flexible layouts as separate field groups, inside a `app/Acf/Groups` directory. You would define your Flexible and it's layouts this way :  
 
 ```php
-<?php
-
-namespace App\Acf\Groups;
-
-use Grogu\Acf\Entities\FieldGroup;
-use WordPlate\Acf\Fields\WysiwygEditor;
-
-class Wysiwyg extends FieldGroup
-{
-    /**
-     * The group name to be displayed in back office. Required.
-     *
-     * @var string
-     */
-    public string $title = 'Wysiwyg';
-    
-    /**
-     * The group slug to be used when transformed into a flexible layout.
-     *
-     * @var string
-     */
-    public string $slug = 'wysiwyg';
-
-    /**
-     * The group fields definition.
-     *
-     * @return array
-     */
-    public function fields(): array
-    {
-        return [
-            WysiwygEditor::make('Text')
-                ->toolbar('simple')
-                ->mediaUpload(false),
-        ];
-    }
-}
-```
-
-You can now add this group as a layout inside your flexible content : 
-
-```php
-<?php
-
 namespace App\Acf\Templates;
 
-use App\Acf\Blocks;
-use WordPlate\Acf\Location;
-use Grogu\Acf\Entities\FieldGroup;
-use WordPlate\Acf\Fields\FlexibleContent;
+use App\Acf\Groups;
 
 class FreeSection extends FieldGroup
 {
-    /**
-     * The group name to be displayed in back office
-     *
-     * @var string
-     */
     public string $title = 'Free section';
 
-    /**
-     * The fields configuration
-     *
-     * @return array
-     */
     public function fields(): array
     {
         return [
@@ -449,16 +376,11 @@ class FreeSection extends FieldGroup
                         'col'     => '4',
                     ])
                     ->layouts([
-                        Groups\Wysiwyg::make()->toLayout(),
+                        Groups\TextImage::make()->toLayout(),
                     ]),
         ];
     }
 
-    /**
-     * The location configuration
-     *
-     * @return array
-     */
     public function location(): array
     {
         return [
@@ -470,7 +392,7 @@ class FreeSection extends FieldGroup
 
 Make sure that the `App\Acf\Templates\FreeSection` group is registred inside your acf config file, *et voilà !*
 
-Behind the scene, the field groups `$title` and `$slug` properties are used to define the layout. However, if you need more control on the field registration, you can manually define your layout : 
+Behind the scene, the layout's FieldGroup `$title` and `$slug` properties are used to define the layout. However, if you need more control on the field registration, you can manually define your layout : 
 
 ```php
 use WordPlate\Acf\Fields\Layout;

@@ -56,4 +56,9 @@ class FieldSet extends FluentPlus
     {
         return Closure::fromCallable([$object ?: $this, $function]);
     }
+
+    public static function make(array $fields = [])
+    {
+        return new static($fields);
+    }
 }
