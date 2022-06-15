@@ -9,12 +9,6 @@
             "email": "thomas@hydrat.agency"
         }
     ],
-    "repositories": [
-        {
-          "type": "vcs",
-          "url": "https://gitlab.com/tgeorgel/extended-acf.git"
-        }
-    ],
     "autoload": {
         "psr-4": {
           "Grogu\\Acf\\": "src/"
