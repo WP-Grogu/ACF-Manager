@@ -2,8 +2,8 @@
 
 namespace Grogu\Acf\Entities;
 
-use App\Helpers\AcfGroup;
-use App\Helpers\AcfGroups;
+use Grogu\Acf\AcfGroup;
+use Grogu\Acf\AcfGroups;
 use Grogu\Acf\Contracts\AcfBlockContract;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
