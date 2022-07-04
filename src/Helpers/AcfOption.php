@@ -24,10 +24,8 @@ class AcfOption
             return $data;
         }
 
-        return new FieldSet($data);
-        
-        // return Arr::isAssoc($data)
-        //         ? new FieldSet($data)
-        //         : collect($data)->map(fn ($i) => new FieldSet($i));
+        return Arr::isAssoc($data)
+                ? new FieldSet($data)
+                : collect($data)->map(fn ($i) => new FieldSet($i));
     }
 }
