@@ -18,7 +18,7 @@ if (!function_exists('option_fieldset')) :
      *
      * @return mixed
      */
-    function fieldset(string $key, bool $format_value = true)
+    function option_fieldset(string $key, bool $format_value = true)
     {
         return \Grogu\Acf\Helpers\AcfOption::get($key, $format_value);
     }
