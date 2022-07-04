@@ -3,7 +3,7 @@
 namespace Grogu\Acf\Transformers;
 
 /**
- * Transforms a ACF link string into a video link represented by an array.
+ * Transforms a text inputs containing markdown links to transform links into <a> tags.
  *
  * @package wp-grogu/acf-manager
  * @author Thomas <thomas@hydrat.agency>
