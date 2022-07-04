@@ -61,4 +61,9 @@ class FieldSet extends FluentPlus
     {
         return new static($fields);
     }
+
+    public function toCollection()
+    {
+        return new Collection($this->toArray());
+    }
 }
