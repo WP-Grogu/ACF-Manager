@@ -2,7 +2,7 @@
 
 namespace Grogu\Acf\Transformers;
 
-use OP\Lib\WpEloquent\Model\Post;
+use OP\Framework\Models\Post;
 use Illuminate\Support\Collection;
 
 /**
@@ -29,6 +29,13 @@ class EloquentPosts extends Transformer
             return new Collection();
         }
 
-        return Post::ids($post_ids)->get();
+        $post_ids = collect($post_ids)
+                        ->filter(fn ($id) => is_string($id) || is_int($id))
+                        ->map(fn ($id) => intval($id))
+                        ->toArray();
+
+        return !empty($post_ids)
+                    ? Post::ids($post_ids)->get()
+                    : $this->value;
     }
 }

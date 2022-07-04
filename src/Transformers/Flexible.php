@@ -3,6 +3,7 @@
 namespace Grogu\Acf\Transformers;
 
 use Grogu\Acf\Entities\FieldSet;
+use Illuminate\Support\Collection;
 
 /**
  * Transforms a given field into a flexible fluent.
@@ -20,7 +21,7 @@ class Flexible extends Transformer
      */
     public function execute()
     {
-        return new FieldSet(
+        return new Collection(
             $this->parseFlexibles($this->value)
         );
     }

@@ -2,6 +2,7 @@
 
 namespace Grogu\Acf\Entities;
 
+use ArrayAccess;
 use Closure;
 use Grogu\Acf\Core\Config;
 use Illuminate\Support\Collection;
