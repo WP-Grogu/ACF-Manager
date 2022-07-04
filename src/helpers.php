@@ -11,3 +11,15 @@ if (!function_exists('fieldset')) :
         return new \Grogu\Acf\Entities\FieldSet($fields);
     }
 endif;
+
+if (!function_exists('option_fieldset')) :
+    /**
+     * Parse the given option into corresponding data.
+     *
+     * @return mixed
+     */
+    function fieldset(string $key, bool $format_value = true)
+    {
+        return \Grogu\Acf\Helpers\AcfOption::get($key, $format_value);
+    }
+endif;
