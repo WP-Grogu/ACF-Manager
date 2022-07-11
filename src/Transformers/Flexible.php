@@ -21,6 +21,10 @@ class Flexible extends Transformer
      */
     public function execute()
     {
+        if (!$this->value) {
+            return null;
+        }
+
         return new Collection(
             $this->parseFlexibles($this->value)
         );

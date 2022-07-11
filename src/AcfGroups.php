@@ -8,7 +8,7 @@ use Grogu\Acf\Entities\FieldSet;
 use Illuminate\Support\Collection;
 
 /**
- * Transforms stored fields to groups, whcih contains FieldSet.
+ * Transforms stored fields to groups, which contains FieldSet.
  *
  * @package wp-grogu/acf-manager
  * @author Thomas <thomas@hydrat.agency>
