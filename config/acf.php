@@ -25,6 +25,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | The registred ACF Gutemberg blocks
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set your ACF Gutemberg blocks.
+    |
+    */
+
+    'blocks' => [
+        // App\Acf\Gutemberg\Numbers::class,
+    ],
+
+
+    /*
+    |--------------------------------------------------------------------------
     | The ACF groups configuration defaults
     |--------------------------------------------------------------------------
     |
@@ -47,11 +61,11 @@ return [
     | Here you can set your flexible field names so they
     | get recursively parsed into FieldSet classes.
     |
+    | @deprecated use the Flexible transformer instead.
+    |
     */
 
-    'flexibles' => [
-        'components',
-    ],
+    'flexibles' => [],
 
 
     /*
@@ -67,6 +81,9 @@ return [
     */
 
     'casts' => [
+        # Flexibles
+        'components' => Grogu\Acf\Transformers\Flexible::class,
+
         # Single post model (Eloquent ORM)
         'post'       => Grogu\Acf\Transformers\EloquentPost::class,
         'page'       => Grogu\Acf\Transformers\EloquentPost::class,
@@ -82,5 +99,27 @@ return [
 
         # Theme casts..
         // 'field_name' => App\Acf\Transformers\MyField::class,
+    ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Gutemberg configuration
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set your Gutemberg configuration.
+    | You may specify a stylesheet & define categories.
+    |
+    */
+
+    'gutemberg' => [
+        'categories' => [
+            // 'theme-blocks' => 'Theme Blocks',
+        ],
+
+        'stylesheets' => [
+            // '*'    => 'dist/css/editor.css',
+            // 'post' => 'dist/css/editor-post.css',
+        ],
     ],
 ];

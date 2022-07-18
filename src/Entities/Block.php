@@ -20,74 +20,25 @@ use WordPlate\Acf\FieldGroup;
 abstract class Block implements AcfBlockContract
 {
     /**
-     * The block properties.
-     *
-     * @var array|object
-     */
-    public $block;
-
-    /**
-     * The block content.
-     *
-     * @var string
-     */
-    public $content;
-
-    /**
-     * The block preview status.
-     *
-     * @var bool
-     */
-    public $preview;
-
-    /**
-     * The current post ID.
-     *
-     * @param int
-     */
-    public $post;
-
-    /**
-     * The block classes.
-     *
-     * @param string
-     */
-    public $classes;
-
-    /**
-     * The block prefix.
-     *
-     * @var string
-     */
-    public $prefix = 'acf/';
-
-    /**
-     * The block namespace.
-     *
-     * @var string
-     */
-    public $namespace;
-
-    /**
      * The block name.
      *
      * @var string
      */
-    public $name = '';
+    public string $name = '';
 
     /**
      * The block slug.
      *
      * @var string
      */
-    public $slug = '';
+    public string $slug = '';
 
     /**
-     * The block view.
+     * The block associated view.
      *
      * @var string
      */
-    public $view;
+    public string $view;
 
     /**
      * The block description.
@@ -130,6 +81,55 @@ abstract class Block implements AcfBlockContract
      * @var array
      */
     public $post_types = [];
+
+    /**
+     * The block properties.
+     *
+     * @var array|object
+     */
+    protected $block;
+
+    /**
+     * The block content.
+     *
+     * @var string
+     */
+    protected $content;
+
+    /**
+     * The block preview status.
+     *
+     * @var bool
+     */
+    public $preview;
+
+    /**
+     * The current post ID.
+     *
+     * @param int
+     */
+    protected $post;
+
+    /**
+     * The block classes.
+     *
+     * @param string
+     */
+    public $classes;
+
+    /**
+     * The block prefix.
+     *
+     * @var string
+     */
+    public $prefix = 'acf/';
+
+    /**
+     * The block namespace.
+     *
+     * @var string
+     */
+    public $namespace;
 
     /**
      * The default block mode.
@@ -253,9 +253,7 @@ abstract class Block implements AcfBlockContract
             'location' => $this->location(),
         ];
 
-        $this->fields = (new FieldGroup($config))->toArray();
-
-        \register_field_group($this->fields);
+        \register_extended_field_group($config);
     }
 
     /**
@@ -368,7 +366,7 @@ abstract class Block implements AcfBlockContract
      *
      * @return View
      */
-    public function view($view, $with = [])
+    public function view(string $view, array $with = [])
     {
         if (
             isset($this->block) &&
@@ -383,7 +381,7 @@ abstract class Block implements AcfBlockContract
             $view = view()->exists($preview) ? $preview : $view;
         }
 
-        return view($view, $with, $this->with())->render();
+        return view($view, $with + $this->with())->render();
     }
 
     /**
@@ -404,21 +402,17 @@ abstract class Block implements AcfBlockContract
     public function location(): array
     {
         return [
-            Location::if('block', $this->namespace),
+            Location::where('block', $this->namespace),
         ];
     }
 
     /**
-     * Get the parsed fields for displaying
+     * Get the the fieldset associated with the block.
      *
-     * @return Collection
+     * @return FieldSet
      */
     protected function getFields()
     {
-        if ($fields = get_fields()) {
-            return empty($fields) ? new Collection() : (new AcfGroup($fields))->get();
-        }
-
-        return new Collection();
+        return new FieldSet(get_fields() ?: []);
     }
 }
