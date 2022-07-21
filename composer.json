@@ -24,7 +24,7 @@
     "require": {
         "php": "^7.2.5|^8.0",
         "laravel/helpers": "^1.0",
-        "tgeorgel/wordplate-acf": "dev-master",
+        "tgeorgel/wordplate-acf": "v1.0.0",
         "wp-grogu/laravel-fluent-plus": "dev-master"
     },
     "suggest": {
