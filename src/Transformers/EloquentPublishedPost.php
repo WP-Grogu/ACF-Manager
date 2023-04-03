@@ -14,24 +14,8 @@ use OP\Framework\Models\Post;
  * @package wp-grogu/acf-manager
  * @author Thomas <thomas@hydrat.agency>
  */
-class EloquentPost extends Transformer
+class EloquentPublishedPost extends EloquentPost
 {
-    /**
-     * The transformer action to execute.
-     *
-     * @return mixed
-     */
-    public function execute()
-    {
-        $post_id = is_array($this->value)
-                    ? (array_values($this->value)[0] ?? null)
-                    : $this->value;
-
-        return is_string($post_id) || is_int($post_id)
-                    ? $this->query(intval($post_id))
-                    : $this->value;
-    }
-
     /**
      * Query the post in database.
      * 
@@ -39,6 +23,6 @@ class EloquentPost extends Transformer
      */
     protected function query(int $post_id)
     {
-        return Post::find($post_id);
+        return Post::published()->find($post_id);
     }
 }

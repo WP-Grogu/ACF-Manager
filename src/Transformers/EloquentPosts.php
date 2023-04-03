@@ -35,7 +35,17 @@ class EloquentPosts extends Transformer
                         ->toArray();
 
         return !empty($post_ids)
-                    ? Post::published()->ids($post_ids)->get()
+                    ? $this->query($post_ids)
                     : $this->value;
+    }
+
+    /**
+     * Query the posts in database.
+     * 
+     * @return OP\Framework\Models\Post|null
+     */
+    protected function query(array $post_ids)
+    {
+        return Post::ids($post_ids)->get();
     }
 }
