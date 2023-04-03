@@ -35,7 +35,7 @@ class EloquentPosts extends Transformer
                         ->toArray();
 
         return !empty($post_ids)
-                    ? Post::ids($post_ids)->get()
+                    ? Post::published()->ids($post_ids)->get()
                     : $this->value;
     }
 }

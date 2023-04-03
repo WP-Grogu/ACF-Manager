@@ -33,7 +33,7 @@ class AcfGroups
             'components',
         ]);
 
-        $this->flexible_names = $defs;
+        $this->flexible_names = $defs ?: [];
     }
 
     protected function buildGroups()

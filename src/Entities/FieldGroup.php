@@ -38,7 +38,7 @@ abstract class FieldGroup implements AcfGroupContract
     /**
      * The group position.
      *
-     * @var string normal
+     * @var string normal|side|acf_after_title
      */
     public string $position = 'normal';
 
@@ -93,7 +93,7 @@ abstract class FieldGroup implements AcfGroupContract
     }
 
     /**
-     * Build the field group parameters array in order to register it. 
+     * Build the field group parameters array in order to register it.
      *
      * @return array
      */

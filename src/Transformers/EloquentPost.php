@@ -28,7 +28,7 @@ class EloquentPost extends Transformer
                     : $this->value;
 
         return is_string($post_id) || is_int($post_id)
-                    ? Post::find(intval($post_id))
+                    ? Post::published()->find(intval($post_id))
                     : $this->value;
     }
 }

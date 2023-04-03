@@ -2,6 +2,7 @@
 
 namespace Grogu\Acf\Transformers;
 
+use Illuminate\Support\Arr;
 use Grogu\Acf\Entities\FieldSet;
 use Illuminate\Support\Collection;
 
@@ -31,22 +32,26 @@ class Flexible extends Transformer
     }
 
     /**
-     * Parse flexible content groups.
-     * Replace the acf_fc_layout key by __layout key.
-     * Adds a __index key to each group.
-     * Setup a new FieldSet.
+     * Parse flexible content into subsequent FieldSet.
+     * Replace the 'acf_fc_layout' key by '__layout'
+     * & add '__index' to know layout's position
      *
      * @return array
      */
-    public function parseFlexibles($flexibles)
+    public function parseFlexibles($flexibles = [])
     {
-        foreach ($flexibles as $index => $flexible) {
-            $flexible['__index']  = $index;
-            $flexible['__layout'] = $flexible['acf_fc_layout'];
-            unset($flexible['acf_fc_layout']);
-            $flexibles[$index] = new FieldSet($flexible);
-        }
+        $flexibles = is_array($flexibles) ? $flexibles : [];
 
-        return $flexibles;
+        return collect($flexibles)
+                    ->values()
+                    ->map(
+                        fn ($flex, $index) => new FieldSet(
+                            array_merge($flex, [
+                                '__index'  => $index,
+                                '__layout' => Arr::pull($flex, 'acf_fc_layout'),
+                            ])
+                        )
+                    )
+                    ->toArray();
     }
 }
