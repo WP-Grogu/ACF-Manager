@@ -22,13 +22,7 @@ class Flexible extends Transformer
      */
     public function execute()
     {
-        if (!$this->value) {
-            return null;
-        }
-
-        return new Collection(
-            $this->parseFlexibles($this->value)
-        );
+        return $this->parseFlexibles($this->value);
     }
 
     /**
@@ -51,7 +45,6 @@ class Flexible extends Transformer
                                 '__layout' => Arr::pull($flex, 'acf_fc_layout'),
                             ])
                         )
-                    )
-                    ->toArray();
+                    );
     }
 }
