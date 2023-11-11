@@ -4,7 +4,6 @@ namespace Grogu\Acf\Transformers;
 
 use Illuminate\Support\Arr;
 use Grogu\Acf\Entities\FieldSet;
-use Illuminate\Support\Collection;
 
 /**
  * Transforms a given field into a flexible fluent.
@@ -39,12 +38,13 @@ class Flexible extends Transformer
         return collect($flexibles)
                     ->values()
                     ->map(
-                        fn ($flex, $index) => new FieldSet(
-                            array_merge($flex, [
+                        fn ($flex, $index) => new FieldSet(array_merge(
+                            Arr::except($flex, 'acf_fc_layout'),
+                            [
                                 '__index'  => $index,
                                 '__layout' => Arr::pull($flex, 'acf_fc_layout'),
-                            ])
-                        )
+                            ]
+                        ))
                     );
     }
 }

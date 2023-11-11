@@ -26,6 +26,10 @@ final class Bootloader
     {
         $this->conf = Config::getInstance();
 
+        if (!function_exists('add_action')) {
+            return;
+        }
+
         # Load defaults, groups, blocks
         add_action('acf/init', [$this, 'boot']);
 
@@ -40,6 +44,14 @@ final class Bootloader
      */
     public function boot()
     {
+        if (!function_exists('register_field_group')) {
+            add_action(
+                'admin_notices',
+                fn () => sprintf('<div class="error notice"><p>%s</p></div>', __('ACF Manager: Please install ACF plugin to use this package.', 'acf-manager'))
+            );
+            return;
+        }
+
         $this->setDefaults();
         $this->setGroups();
         $this->setBlocks();
