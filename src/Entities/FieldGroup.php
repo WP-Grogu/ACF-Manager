@@ -4,7 +4,7 @@ namespace Grogu\Acf\Entities;
 
 use WordPlate\Acf\Fields\Layout;
 use Grogu\Acf\Contracts\AcfGroupContract;
-use WordPlate\Acf\FieldGroup as WordPlateFieldGroup;
+use Illuminate\Support\Traits\Macroable;
 
 /**
  * An ACF Group definition to be registred.
@@ -14,13 +14,15 @@ use WordPlate\Acf\FieldGroup as WordPlateFieldGroup;
  */
 abstract class FieldGroup implements AcfGroupContract
 {
+    use Macroable;
+
     /**
      * The group name to be displayed in back office.
      *
      * @var string
      */
     public string $title;
-    
+
     /**
      * The group slug to be used when transformed into a flexible layout.
      *
@@ -48,6 +50,20 @@ abstract class FieldGroup implements AcfGroupContract
      * @var int
      */
     public int $order = 10;
+
+    /**
+     * When used as a Layout, configure the minimum amount of time this layout must be used.
+     *
+     * @var int
+     */
+    public ?int $minOccursLayout = null;
+
+    /**
+     * When used as a Layout, configure the maximum amount of time this layout must be used.
+     *
+     * @var int
+     */
+    public ?int $maxOccursLayout = null;
 
     /**
      * The hidden items on screen
@@ -125,13 +141,17 @@ abstract class FieldGroup implements AcfGroupContract
      * @param string $layout block, row or table
      * @return \WordPlate\Acf\Fields\Layout
      */
-    public function toLayout(string $layout = 'block')
+    public function toLayout(string $layout = 'block', ?int $min = null, ?int $max = null)
     {
-        return Layout::make($this->title, $this->slug ?: null)
-                    ->layout($layout)
-                    ->fields(
-                        $this->fields()
-                    );
+        $layout = Layout::make($this->title, $this->slug ?: null)
+                        ->layout($layout)
+                        ->when($this->minOccursLayout, fn ($layout, $min) => $layout->min($min))
+                        ->when($this->maxOccursLayout, fn ($layout, $max) => $layout->max($max))
+                        ->fields(
+                            $this->fields()
+                        );
+
+        return $layout;
     }
 
     /**

@@ -2,11 +2,11 @@
 
 namespace Grogu\Acf\Entities;
 
-use ArrayAccess;
 use Closure;
 use Grogu\Acf\Core\Config;
-use Illuminate\Support\Collection;
 use Grogu\FluentPlus\FluentPlus;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Traits\Macroable;
 use Grogu\Acf\Contracts\TransformerContract;
 use Grogu\Acf\Exceptions\InvalidTransformerException;
 
@@ -19,13 +19,15 @@ use Grogu\Acf\Exceptions\InvalidTransformerException;
  */
 class FieldSet extends FluentPlus
 {
+    use Macroable;
+
     /**
      * Get the cast definitions
      */
     protected function getCasts()
     {
         $casts = new Collection();
-        
+
         $conf  = Config::getInstance();
         $defs  = $conf->get('acf.casts', []);
 
