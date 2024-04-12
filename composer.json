@@ -23,7 +23,7 @@
         "php": "^8.0",
         "laravel/helpers": "^1.0",
         "tgeorgel/wordplate-acf": "^2.0.0",
-        "wp-grogu/laravel-fluent-plus": "dev-master"
+        "wp-grogu/laravel-fluent-plus": "^1.1"
     },
     "suggest": {
         "tgeorgel/object-press": "A powerfull Object-Oriented library, adding greatest illuminate packages (Laravel) into Wordpress, such as the Eloquent ORM, validation, events, and many more."
